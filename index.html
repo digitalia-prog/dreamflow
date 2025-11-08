@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ DreamFlow</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(135deg,#050505,#1a0033);color:#fff;font-family:Inter,sans-serif;min-height:100vh}#auth{display:flex;justify-content:center;align-items:center;height:100vh}.box{background:rgba(26,26,46,.95);padding:3rem;border-radius:20px;width:90%;max-width:400px;border:1px solid rgba(143,99,233,.3)}.box h1{font-size:2.5rem;text-align:center;background:linear-gradient(135deg,#8F63E9,#FF1493);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2rem}input{width:100%;padding:1rem;margin-bottom:1rem;background:rgba(0,0,0,.5);border:1px solid rgba(143,99,233,.3);color:#fff;border-radius:8px}.btn{width:100%;padding:1rem;background:linear-gradient(135deg,#8F63E9,#6B5BD9);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-bottom:1rem}.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(143,99,233,.3)}nav{background:rgba(10,10,10,.95);padding:1.5rem;border-bottom:1px solid rgba(143,99,233,.3);display:flex;justify-content:space-between;align-items:center}.logo{font-size:2rem;font-weight:900;background:linear-gradient(135deg,#8F63E9,#FF1493);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.nav-btn{background:0;border:none;color:#b0b0b0;cursor:pointer;font-weight:600;padding:0.5rem 1rem}.nav-btn.active{color:#8F63E9;border-bottom:3px solid #8F63E9}#main{display:none}#main.active{display:block}.container{max-width:1200px;margin:0 auto;padding:2rem}.page{display:none}.page.active{display:block}.header{margin-bottom:2rem}.header h1{font-size:2.5rem;background:linear-gradient(135deg,#fff,#8F63E9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-bottom:2rem}.stat{background:linear-gradient(135deg,rgba(143,99,233,.15),rgba(255,20,147,.05));border:1px solid rgba(143,99,233,.3);padding:2rem;border-radius:15px}.stat-val{font-size:2.5rem;font-weight:900;color:#8F63E9}.stat-label{color:#b0b0b0;font-size:.9rem;margin-top:.5rem}.gen-grid{display:grid;grid-template-columns:2fr 1fr;gap:2rem}.panel{background:linear-gradient(135deg,rgba(26,26,46,.9),rgba(26,26,46,.5));border:1px solid rgba(143,99,233,.3);border-radius:15px;padding:2rem}.panel h2{font-size:1.5rem;margin-bottom:1.5rem;color:#8F63E9}.form-group{margin-bottom:1rem}.form-group label{display:block;margin-bottom:.5rem;font-weight:600}.script-card{background:rgba(0,0,0,.5);border-left:4px solid #8F63E9;padding:1.5rem;margin-bottom:1rem;border-radius:10px}.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1rem}.metric{background:rgba(143,99,233,.2);padding:1rem;border-radius:8px;text-align:center}.metric-val{font-weight:700;color:#8F63E9;font-size:1.2rem}.trend{background:rgba(0,0,0,.3);padding:1rem;margin-bottom:1rem;border-left:3px solid #8F63E9;cursor:pointer;border-radius:8px}.trend:hover{background:rgba(0,0,0,.5)}</style>
+</head>
+<body>
+<div id="auth">
+<div class="box">
+<h1>⚡ DreamFlow</h1>
+<input type="email" id="email" placeholder="Email" value="test@example.com">
+<input type="password" id="pass" placeholder="Password" value="123456">
+<button class="btn" onclick="login()">🚀 Login</button>
+</div>
+</div>
+<div id="main">
+<nav>
+<div class="logo">⚡ DreamFlow</div>
+<div>
+<button class="nav-btn active" onclick="showPage('dash')">Dashboard</button>
+<button class="nav-btn" onclick="showPage('gen')">Generator</button>
+<button class="nav-btn" onclick="showPage('ana')">Analytics</button>
+</div>
+<button class="btn" style="width:auto;padding:0.5rem 1rem" onclick="logout()">Logout</button>
+</nav>
+<div class="container">
+<div id="dash" class="page active">
+<div class="header"><h1>📊 Dashboard</h1></div>
+<div class="stats">
+<div class="stat"><div class="stat-label">Scripts Generated</div><div class="stat-val" id="total">0</div></div>
+<div class="stat"><div class="stat-label">Avg Score</div><div class="stat-val" id="avg">--</div></div>
+<div class="stat"><div class="stat-label">Total Views</div><div class="stat-val" id="views">0K</div></div>
+<div class="stat"><div class="stat-label">Status</div><div class="stat-val" style="color:#4ADE80">Premium</div></div>
+</div>
+</div>
+<div id="gen" class="page">
+<div class="header"><h1>✨ Script Generator</h1></div>
+<div class="gen-grid">
+<div class="panel">
+<h2>📝 Create Scripts</h2>
+<div class="form-group">
+<label>Trend</label>
+<input type="text" id="trend" placeholder="#MainCharacter">
+</div>
+<button class="btn" onclick="generate()">🚀 Generate 5 Scripts</button>
+<div id="results"></div>
+</div>
+<div class="panel">
+<h2>📊 Trends</h2>
+<div class="trend" onclick="setTrend('#MainCharacter')">
+<div style="color:#8F63E9;font-weight:700">#MainCharacter</div>
+<div style="color:#b0b0b0;font-size:.9rem">2.4M videos</div>
+</div>
+<div class="trend" onclick="setTrend('#FYP')">
+<div style="color:#8F63E9;font-weight:700">#FYP</div>
+<div style="color:#b0b0b0;font-size:.9rem">5.2M videos</div>
+</div>
+<div class="trend" onclick="setTrend('#Viral')">
+<div style="color:#8F63E9;font-weight:700">#Viral</div>
+<div style="color:#b0b0b0;font-size:.9rem">3.8M videos</div>
+</div>
+</div>
+</div>
+</div>
+<div id="ana" class="page">
+<div class="header"><h1>📈 Analytics</h1></div>
+<div class="panel">
+<h2>Performance</h2>
+<p style="color:#b0b0b0">Total Views: <span id="ana-views">0</span>K</p>
+<p style="color:#b0b0b0;margin-top:1rem">Engagement: 7.2%</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+let total=0, views=0;
+function login(){document.getElementById('auth').style.display='none'; document.getElementById('main').classList.add('active');}
+function logout(){document.getElementById('auth').style.display='flex'; document.getElementById('main').classList.remove('active');}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); document.getElementById(p).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active')); event.target.classList.add('active');}
+function setTrend(t){document.getElementById('trend').value=t;}
+function generate(){const t=document.getElementById('trend').value; if(!t)return; let s=0; let html=''; for(let i=1;i<=5;i++){const sc=60+Math.floor(Math.random()*40); const v=100+Math.floor(Math.random()*900); s+=sc; views+=v; total+=5; html+=`<div class="script-card"><div style="color:#8F63E9;font-weight:700">Script ${i}: ${t}</div><div style="font-family:monospace;font-size:.9rem;background:rgba
+(0,0,0,.3);padding:1rem;margin:1rem 0;border-radius:8px">[HOOK] Attention-grabbing opening!\n[BODY] Main content\n[CTA] Like & Follow!</div><div class="metrics"><div class="metric"><div class="metric-label">Score</div><div class="metric-val">${sc}/100</div></div><div class="metric"><div class="metric-label">Views</div><div class="metric-val">${v}K</div></div><div class="metric"><div class="metric-label">Engagement</div><div class="metric-val">${(65+Math.random()*35).toFixed(0)}%</div></div></div></div>`;} document.getElementById('results').innerHTML=html; document.getElementById('total').textContent=total; document.getElementById('avg').textContent=Math.round(s/5)+'/100'; document.getElementById('views').textContent=views; document.getElementById('ana-views').textContent=views;}
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DreamFlow</title>
+  <style>
+    body { background: #0f0f0f; color: #fff; font-family: Arial; padding: 40px; }
+    .hero { background: linear-gradient(135deg, #8F63E9, #6B5BD9); padding: 40px; border-radius: 10px; text-align: center; margin-bottom: 40px; }
+    .hero h1 { font-size: 2.5rem; margin: 0; }
+    .hero p { font-size: 1.2rem; margin: 10px 0 20px 0; }
+    .container { max-width: 600px; margin: 0 auto; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid #8F63E9; color: #fff; border-radius: 5px; }
+    .btn-generate { width: 100%; background: #FF1493; color: #fff; border: none; padding: 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+    .btn-generate:hover { background: #ff1493dd; }
+    .result { background: rgba(143,99,233,0.1); padding: 20px; border-radius: 10px; margin-top: 20px; display: none; }
+    .result.show { display: block; }
+    .script-text { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; margin-bottom: 10px; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>⚡ DreamFlow</h1>
+    <p>Générez des scripts TikTok viraux en 30 secondes</p>
+  </div>
+
+  <div class="container">
+    <h2 style="color: #8F63E9;">Générateur de Scripts</h2>
+    
+    <div style="background: rgba(143,99,233,0.1); padding: 20px; border-radius: 10px;">
+      <div class="form-group">
+        <label>Durée</label>
+        <select id="duration">
+          <option>30 secondes</option>
+          <option>60 secondes</option>
+          <option>90 secondes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Format</label>
+        <select id="format">
+          <option>Point de vue</option>
+          <option>Voix off</option>
+          <option>Récit</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tendance</label>
+        <input type="text" id="trend" placeholder="Ex: #MainCharacter">
+      </div>
+
+      <button class="btn-generate" onclick="generateScript()">🚀 Générer un script</button>
+    </div>
+
+    <div id="result" class="result">
+      <h3>✅ Script généré :</h3>
+      <div id="scriptText" class="script-text"></div>
+      <button class="btn-generate" onclick="copyScript()" style="background: #8F63E9;">📋 Copier le script</button>
+    </div>
+  </div>
+
+  <script>
+    async function generateScript() {
+      const trend = document.getElementById('trend').value;
+      const duration = document.getElementById('duration').value;
+      const format = document.getElementById('format').value;
+
+      if (!trend) {
+        alert('Veuillez entrer une tendance !');
+        return;
+      }
+
+      try {
+        console.log('Envoi de la requête...');
+        const response = await fetch('http://localhost:3000/api/generate-script', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ trend, duration, format })
+        });
+
+        console.log('Réponse reçue:', response.status);
+        const data = await response.json();
+        console.log('Données:', data);
+
+        if (data.success) {
+          document.getElementById('scriptText').textContent = data.script + '\n\n📊 Viral Score: ' + data.viralScore + '\n📈 Vues prédites: ' + data.viewsPrediction;
+          document.getElementById('result').classList.add('show');
+        } else {
+          alert('Erreur: ' + (data.error || 'Impossible de générer le script'));
+        }
+      } catch (error) {
+        console.error('Erreur complète:', error);
+        alert('❌ Erreur: ' + error.message);
+      }
+    }
+
+    function copyScript() {
+      const text = document.getElementById('scriptText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Script copié !');
+      });
+    }
+  </script>
+</body>
+</html>
