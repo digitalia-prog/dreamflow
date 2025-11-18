@@ -1,59 +1,77 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const OpenAI = require('openai');
-
-dotenv.config();
+const { connectDB, User, Script } = require('./database');
+const { generateToken, verifyToken } = require('./auth');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'DreamFlow API - OpenAI' });
-});
+// Connect to MongoDB
+connectDB();
 
-app.post('/api/generate', async (req, res) => {
+// Middleware: Verify JWT
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Missing token' });
+  
+  const decoded = verifyToken(token);
+  if (!decoded) return res.status(403).json({ error: 'Invalid token' });
+  
+  req.user = decoded;
+  next();
+};
+
+// Login endpoint
+app.post('/api/auth/login', async (req, res) => {
   try {
-    const { network, language, count, topic } = req.body;
+    const { email, password } = req.body;
+    let user = await User.findOne({ email });
     
-    const message = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: 'You are a viral script generator. Always return ONLY valid JSON array.' },
-        { role: 'user', content: `Generate exactly ${count} viral ${network} scripts in ${language} about "${topic || 'trending topics'}". 
-
-Return ONLY this JSON format, nothing else:
-[
-  {"id": 1, "title": "Script 1", "content": "[HOOK]...[BODY]...[CTA]..."},
-  {"id": 2, "title": "Script 2", "content": "[HOOK]...[BODY]...[CTA]..."}
-]` }
-      ],
-      temperature: 0.7,
-      max_tokens: 2000
-    });
-
-    let responseText = message.choices[0].message.content.trim();
+    if (!user) {
+      user = await User.create({ email, password, plan: 'FREE' });
+    }
     
-    // Nettoyer le JSON
-    if (responseText.startsWith('```json')) responseText = responseText.slice(7);
-    if (responseText.startsWith('```')) responseText = responseText.slice(3);
-    if (responseText.endsWith('```')) responseText = responseText.slice(0, -3);
-    responseText = responseText.trim();
-    
-    let scripts = JSON.parse(responseText);
-
-    res.json({ success: true, network, language, model: 'GPT-4o Mini', scripts });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: error.message });
+    const token = generateToken(user._id);
+    res.json({ success: true, token, user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ DreamFlow API (OpenAI) running on http://localhost:${PORT}`);
+// Generate scripts endpoint
+app.post('/api/generate', authenticate, async (req, res) => {
+  try {
+    const { network, language, count } = req.body;
+    const user = await User.findById(req.user.userId);
+    
+    // Check limit
+    if (user.plan === 'FREE' && user.scriptsUsed >= 5) {
+      return res.status(429).json({ error: 'Limit reached' });
+    }
+    
+    // Simulate script generation (replace with real API call)
+    const scripts = [];
+    for (let i = 0; i < parseInt(count); i++) {
+      const script = {
+        title: `Script ${i + 1}`,
+        content: `[HOOK] Accroche virale\n[BODY] Contenu engageant\n[CTA] Appel à action`,
+        network,
+        language,
+      };
+      scripts.push(script);
+      await Script.create({ userId: user._id, ...script });
+    }
+    
+    // Update usage
+    user.scriptsUsed += parseInt(count);
+    await user.save();
+    
+    res.json({ success: true, scripts, model: 'GPT-4o Mini' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
