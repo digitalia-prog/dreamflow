@@ -2,13 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const { connectDB, User, Script } = require('./database');
 const { generateToken, verifyToken } = require('./auth');
-const { limiter, apiLimiter, securityHeaders, validateInput, sanitizeData } = require('./security');
+const { limiter, apiLimiter, securityHeaders, validateInput } = require('./security');
 
 const app = express();
 
 // Security middleware
 app.use(securityHeaders);
-app.use(sanitizeData);
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({
   origin: ['https://magnifique-longma-bd6a8c.netlify.app', 'http://localhost:3000'],
@@ -31,7 +30,7 @@ const authenticate = (req, res, next) => {
   next();
 };
 
-// Login endpoint (with validation)
+// Login endpoint
 app.post('/api/auth/login', validateInput, apiLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -48,24 +47,21 @@ app.post('/api/auth/login', validateInput, apiLimiter, async (req, res) => {
   }
 });
 
-// Generate scripts endpoint (protected)
+// Generate scripts endpoint
 app.post('/api/generate', authenticate, apiLimiter, async (req, res) => {
   try {
     const { network, language, count } = req.body;
     
-    // Validate input
     if (!network || !language || !count) {
       return res.status(400).json({ error: 'Missing parameters' });
     }
     
     const user = await User.findById(req.user.userId);
     
-    // Check limit
     if (user.plan === 'FREE' && user.scriptsUsed >= 5) {
       return res.status(429).json({ error: 'Limit reached. Upgrade to PRO!' });
     }
     
-    // Generate scripts
     const scripts = [];
     for (let i = 0; i < parseInt(count); i++) {
       const script = {
@@ -78,7 +74,6 @@ app.post('/api/generate', authenticate, apiLimiter, async (req, res) => {
       await Script.create({ userId: user._id, ...script });
     }
     
-    // Update usage
     user.scriptsUsed += parseInt(count);
     await user.save();
     
@@ -94,4 +89,4 @@ app.get('/api/health', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT} with security enabled`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

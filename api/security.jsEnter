@@ -1,17 +1,15 @@
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
 
-// Rate limiting middleware
+^X Exit     ^J Justify  ^W Where Is ^V Next Page^U UnCut Tex^T To Spell
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requests per windowMs
   message: 'Too many requests, please try again later'
 });
 
 // API rate limiter (stricter)
 const apiLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 30,
+  windowMs: 60 * 1000, // 1 minute
+  max: 30, // 30 requests per minute
   message: 'Too many API requests'
 });
 
@@ -42,9 +40,13 @@ const validateInput = (req, res, next) => {
   next();
 };
 
+// Data sanitization
+const sanitizeData = mongoSanitize();
+
 module.exports = {
   limiter,
   apiLimiter,
   securityHeaders,
   validateInput,
+  sanitizeData,
 };
