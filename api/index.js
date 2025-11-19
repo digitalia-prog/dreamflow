@@ -1,19 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { connectDB, User, Script } = require('./database');
 const { generateToken, verifyToken } = require('./auth');
-const { limiter, apiLimiter, securityHeaders, validateInput } = require('./security');
 
 const app = express();
 
-// Security middleware
-app.use(securityHeaders);
+// Middleware
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({
   origin: ['https://magnifique-longma-bd6a8c.netlify.app', 'http://localhost:3000'],
   credentials: true
 }));
-app.use(limiter);
+
+// Serve static files (index.html, CSS, JS)
+app.use(express.static(path.join(__dirname, '..')));
 
 // Connect to MongoDB
 connectDB();
@@ -31,7 +32,7 @@ const authenticate = (req, res, next) => {
 };
 
 // Login endpoint
-app.post('/api/auth/login', validateInput, apiLimiter, async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     let user = await User.findOne({ email });
@@ -48,7 +49,7 @@ app.post('/api/auth/login', validateInput, apiLimiter, async (req, res) => {
 });
 
 // Generate scripts endpoint
-app.post('/api/generate', authenticate, apiLimiter, async (req, res) => {
+app.post('/api/generate', authenticate, async (req, res) => {
   try {
     const { network, language, count } = req.body;
     
@@ -86,6 +87,11 @@ app.post('/api/generate', authenticate, apiLimiter, async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
+});
+
+// Serve index.html for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
