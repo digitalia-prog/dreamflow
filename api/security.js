@@ -1,0 +1,55 @@
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+
+// Rate limiting middleware
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requests per windowMs
+  message: 'Too many requests, please try again later'
+});
+
+// API rate limiter (stricter)
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30, // 30 requests per minute
+  message: 'Too many API requests'
+});
+
+// Security headers
+const securityHeaders = helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+    },
+  },
+  hsts: { maxAge: 31536000, includeSubDomains: true },
+  frameguard: { action: 'deny' },
+  xssFilter: true,
+  noSniff: true,
+});
+
+// Input validation
+const validateInput = (req, res, next) => {
+  if (req.body.email && !req.body.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    return res.status(400).json({ error: 'Invalid email' });
+  }
+  if (req.body.password && req.body.password.length < 6) {
+    return res.status(400).json({ error: 'Password too short' });
+  }
+  next();
+};
+
+// Data sanitization
+const sanitizeData = mongoSanitize();
+
+module.exports = {
+  limiter,
+  apiLimiter,
+  securityHeaders,
+  validateInput,
+  sanitizeData,
+};
