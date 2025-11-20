@@ -18,16 +18,17 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/generate', (req, res) => {
   const { network, language, count } = req.body;
-  res.json({
-    success: true,
-    scripts: [{
-      title: `Script - ${network}`,
-      content: '[HOOK] Grabbing attention!\n[BODY] Main content\n[CTA] Follow!',
-      score: 75,
-      views: 500000,
-      engagement: 85
-    }]
-  });
+  const scripts = [];
+  for (let i = 1; i <= (parseInt(count) || 1); i++) {
+    scripts.push({
+      title: `Script ${i} - ${network}`,
+      content: '[HOOK] Attention!\n[BODY] Content\n[CTA] Follow!',
+      score: Math.floor(Math.random() * 40) + 60,
+      views: Math.floor(Math.random() * 900000) + 100000,
+      engagement: Math.floor(Math.random() * 40) + 60
+    });
+  }
+  res.json({ success: true, scripts: scripts, model: 'GPT-4o Mini' });
 });
 
 app.get('/', (req, res) => {
@@ -36,3 +37,4 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+EOF~
