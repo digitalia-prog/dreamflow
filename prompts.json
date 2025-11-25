@@ -1,0 +1,41 @@
+{
+  "fr": {
+    "tiktok": {
+      "fashion": "[HOOK] Tendance mode choc! [BODY] Montre look viral [CTA] Sauvegarde ce look #Fashion #Trend #Mode #Style #Viral",
+      "fitness": "[HOOK] Transformation 30 jours! [BODY] Montre exercice [CTA] Essaye ce défi #Fitness #Gains #Transformation #Sport",
+      "food": "[HOOK] Recette en 5 min! [BODY] Ingrédients + étapes [CTA] Abonne-toi #Food #Recette #Cuisine #Yummy",
+      "beauty": "[HOOK] Maquillage viral! [BODY] Montre technique [CTA] Essaye maintenant #Beauty #Makeup #Tutorial #Glow",
+      "tech": "[HOOK] Tech astuce! [BODY] Montre feature [CTA] Partage! #Tech #Innovation #Gadget #AI",
+      "marketing": "[HOOK] Growth hack! [BODY] Stratégie marketing [CTA] Teste! #Marketing #Growth #Business #Strategy",
+      "realestate": "[HOOK] Appart de rêve! [BODY] Montre propriété [CTA] Contacte-nous #RealEstate #Immobilier #Maison",
+      "ecommerce": "[HOOK] Produit viral! [BODY] Montre bénéfices [CTA] Achète maintenant #Ecommerce #Shopping #Deal #Trending"
+    },
+    "instagram": {
+      "fashion": "[HOOK] Look parfait? [BODY] Montre outfit [CTA] Sauvegarde #Fashion #Style #OOTD #Insta",
+      "fitness": "[HOOK] Avant/Après! [BODY] Montre transformation [CTA] Rejoins-nous #Fitness #Transformation #Gym #Gains",
+      "food": "[HOOK] Foodie alert! [BODY] Montre recette [CTA] Essaye #Food #Foodie #Recipe #Delicious",
+      "beauty": "[HOOK] Glow up! [BODY] Montre beauty routine [CTA] Like & Follow #Beauty #Skincare #Routine #Glow",
+      "tech": "[HOOK] Tech du futur! [BODY] Montre produit [CTA] Découvre #Tech #Innovation #Gadget #Future",
+      "marketing": "[HOOK] Marketing tip! [BODY] Stratégie [CTA] Applique! #Marketing #Business #Tips #Growth",
+      "realestate": "[HOOK] Rêve immobilier! [BODY] Propriété [CTA] Visite #RealEstate #Home #Dream #Living",
+      "ecommerce": "[HOOK] Deal du jour! [BODY] Produit [CTA] Achète! #Ecommerce #Deal #Shopping #Limited"
+    },
+    "youtube": {
+      "fashion": "[HOOK] Fashion haul! [BODY] Montre vêtements [CTA] Subscribe #Fashion #Haul #Style #Trend",
+      "fitness": "[HOOK] Workout challenge! [BODY] Exercices [CTA] Subscribe #Fitness #Workout #Challenge #Gym",
+      "food": "[HOOK] Cooking tutorial! [BODY] Recette [CTA] Subscribe #Cooking #Recipe #Food #Tutorial",
+      "beauty": "[HOOK] Beauty tutorial! [BODY] Technique [CTA] Subscribe #Beauty #Tutorial #Makeup #DIY",
+      "tech": "[HOOK] Tech review! [BODY] Produit [CTA] Subscribe #Tech #Review #Gadget #Innovation",
+      "marketing": "[HOOK] Business tips! [BODY] Stratégie [CTA] Subscribe #Business #Marketing #Tips #Growth",
+      "realestate": "[HOOK] Home tour! [BODY] Propriété [CTA] Subscribe #RealEstate #HomeDecor #Tour #Design",
+      "ecommerce": "[HOOK] Product review! [BODY] Produit [CTA] Subscribe #Ecommerce #Review #Product #Worth"
+    },
+    "facebook": {
+      "fashion": "[HOOK] Fashion alert! [BODY] Astuce mode [CTA] Partage #Fashion",
+      "fitness": "[HOOK] Fitness tip! [BODY] Conseil sport [CTA] Like & Share #Fitness",
+      "food": "[HOOK] Recette facile! [BODY] Instructions [CTA] Essaye! #Food",
+      "beauty": "[HOOK] Beauty secret! [BODY] Astuce beauté [CTA] Partage #Beauty",
+      "ecommerce": "[HOOK] Deal exclusif! [BODY] Produit [CTA] Achète! #Shopping"
+    }
+  }
+}
