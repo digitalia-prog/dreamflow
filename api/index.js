@@ -10,14 +10,16 @@ app.use(cors({ origin: ['http://localhost:3000', 'https://dreamflow.fr'], creden
 app.use(express.static(path.join(__dirname, '..')));
 
 let brandProfiles = {};
+let analytics = { totalScripts: 0, totalUsers: 0, revenue: 0 };
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK' });
+  res.json({ status: 'OK', analytics });
 });
 
 app.post('/api/brand', (req, res) => {
   const { brandId, name, industry, tone } = req.body;
   brandProfiles[brandId] = { name, industry, tone };
+  analytics.totalUsers++;
   res.json({ success: true, brand: brandProfiles[brandId] });
 });
 
@@ -41,12 +43,18 @@ app.post('/api/generate', (req, res) => {
         views: Math.floor(Math.random() * 900000) + 100000,
         engagement: Math.floor(Math.random() * 40) + 60
       });
+      
+      analytics.totalScripts++;
     }
     
-    res.json({ success: true, scripts: scripts, brand: brand.name });
+    res.json({ success: true, scripts: scripts, brand: brand.name, stats: { generated: count, totalGenerated: analytics.totalScripts } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get('/api/analytics', (req, res) => {
+  res.json(analytics);
 });
 
 app.get('/', (req, res) => {
