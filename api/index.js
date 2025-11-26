@@ -6,6 +6,7 @@ const tendances = require('../tendances.json');
 const rateLimiter = require('./security');
 const activityHistory = require('./historique');
 const reportGenerator = require('./rapports');
+const templateManager = require('./templates');
 
 const app = express();
 
@@ -125,6 +126,22 @@ app.post('/api/brand/:brandId/report/export/csv', (req, res) => {
   const csv = reportGenerator.exportCSV(req.params.brandId, history);
   res.header('Content-Type', 'text/csv');
   res.send(csv);
+});
+
+app.get('/api/templates', (req, res) => {
+  res.json(templateManager.getAllTemplates());
+});
+
+app.get('/api/templates/:category', (req, res) => {
+  const template = templateManager.getTemplate(req.params.category);
+  if (!template) return res.status(404).json({ error: 'Template not found' });
+  res.json(template);
+});
+
+app.get('/api/templates/:category/script/:scriptId', (req, res) => {
+  const script = templateManager.getScript(req.params.category, parseInt(req.params.scriptId));
+  if (!script) return res.status(404).json({ error: 'Script not found' });
+  res.json(script);
 });
 
 app.get('/', (req, res) => {
