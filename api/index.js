@@ -4,6 +4,7 @@ const path = require('path');
 const prompts = require('../prompts.json');
 const tendances = require('../tendances.json');
 const rateLimiter = require('./security');
+const activityHistory = require('./historique');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.post('/api/brand', (req, res) => {
   if (!brandId || !name) return res.status(400).json({ error: 'Missing fields' });
   brandProfiles[brandId] = { name, industry, tone, plan: plan || 'starter' };
   analytics.totalUsers++;
+  activityHistory.addActivity(brandId, { type: 'brand_created', status: 'success', details: { name } });
   res.json({ success: true, brand: brandProfiles[brandId] });
 });
 
@@ -41,9 +43,14 @@ app.post('/api/generate', (req, res) => {
     
     const brand = brandProfiles[brandId] || { name: 'Brand', tone: 'casual', plan: 'starter' };
     
-    // Vérifier rate limit
     const rateCheck = rateLimiter.checkRateLimit(brandId, brand.plan);
     if (!rateCheck.allowed) {
+      activityHistory.addActivity(brandId, { 
+        type: 'script_blocked', 
+        network, 
+        status: 'blocked',
+        details: { reason: rateCheck.reason }
+      });
       return res.status(429).json({ error: rateCheck.reason, details: rateCheck });
     }
 
@@ -68,6 +75,13 @@ app.post('/api/generate', (req, res) => {
       analytics.totalScripts++;
     }
     
+    activityHistory.addActivity(brandId, { 
+      type: 'script_generated', 
+      network, 
+      scriptCount: numScripts,
+      status: 'success'
+    });
+    
     res.json({ 
       success: true, 
       scripts: scripts, 
@@ -86,6 +100,12 @@ app.get('/api/analytics', (req, res) => {
 app.get('/api/user/:userId/stats', (req, res) => {
   const stats = rateLimiter.getUserStats(req.params.userId);
   res.json(stats || { error: 'User not found' });
+});
+
+app.get('/api/brand/:brandId/history', (req, res) => {
+  const history = activityHistory.getHistory(req.params.brandId);
+  const stats = activityHistory.getStats(req.params.brandId);
+  res.json({ history, stats });
 });
 
 app.get('/', (req, res) => {
