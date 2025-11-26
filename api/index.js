@@ -5,6 +5,7 @@ const prompts = require('../prompts.json');
 const tendances = require('../tendances.json');
 const rateLimiter = require('./security');
 const activityHistory = require('./historique');
+const reportGenerator = require('./rapports');
 
 const app = express();
 
@@ -106,6 +107,24 @@ app.get('/api/brand/:brandId/history', (req, res) => {
   const history = activityHistory.getHistory(req.params.brandId);
   const stats = activityHistory.getStats(req.params.brandId);
   res.json({ history, stats });
+});
+
+app.get('/api/brand/:brandId/report', (req, res) => {
+  const report = reportGenerator.getReport(req.params.brandId);
+  res.json(report || { error: 'No report found' });
+});
+
+app.post('/api/brand/:brandId/report/export/json', (req, res) => {
+  const report = reportGenerator.exportJSON(req.params.brandId);
+  if (!report) return res.status(404).json({ error: 'Report not found' });
+  res.json(report);
+});
+
+app.post('/api/brand/:brandId/report/export/csv', (req, res) => {
+  const history = activityHistory.getHistory(req.params.brandId, 1000);
+  const csv = reportGenerator.exportCSV(req.params.brandId, history);
+  res.header('Content-Type', 'text/csv');
+  res.send(csv);
 });
 
 app.get('/', (req, res) => {
