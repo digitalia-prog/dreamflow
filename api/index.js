@@ -15,7 +15,7 @@ app.post("/api/auth/register", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return r"Email & mot de passe requis" });
+    return res.status(400).json({ error: "Email & mot de passe requis" });
   }
 
   if (users[email]) {
@@ -65,3 +65,4 @@ app.get("/api/protected", (req, res) => {
 // START SERVER
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log("⚡ API RUNNING ON", PORT));
+
