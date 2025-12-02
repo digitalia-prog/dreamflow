@@ -1,68 +1,82 @@
-import express from "express";
-import cors from "cors";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 app.use(cors());
 
-// FAKE DATABASE
-const users = {};
+// === STOCKAGE EN MÉMOIRE ===
+let brandProfiles = {};
+let userHistory = {};
+let analytics = {
+  totalScripts: 0,
+  totalUsers: 0
+};
 
-// REGISTER
-app.post("/api/auth/register", async (req, res) => {
-  const { email, password } = req.body;
+// === SERVIR LE FRONTEND ===
+app.use(express.static(path.join(__dirname, "..")));
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email & mot de passe requis" });
-  }
-
-  if (users[email]) {
-    return res.status(400).json({ error: "Compte déjà existant" });
-  }
-
-  const hashed = await bcrypt.hash(password, 10);
-  users[email] = { email, password: hashed };
-
-  res.json({ success: true });
+// === HEALTHCHECK ===
+app.get("/api/health", (req, res) => {
+  res.json({ status: "OK", analytics });
 });
 
-// LOGIN
-app.post("/api/auth/login", async (req, res) => {
-  const { email, password } = req.body;
+// === CRÉER / METTRE À JOUR UNE MARQUE ===
+app.post("/api/brand", (req, res) => {
+  const { brandId, name, industry, tone, plan } = req.body;
 
-  if (!users[email]) {
-    return res.status(400).json({ error: "Email incorrect" });
-  }
+  brandProfiles[brandId] = {
+    name,
+    industry,
+    tone,
+    plan: plan || "starter"
+  };
 
-  const valid = await bcrypt.compare(password, users[email].password);
-  if (!valid) {
-    return res.status(400).json({ error: "Mot de passe incorrect" });
-  }
-
-  const token = jwt.sign({ email }, "secret123", { expiresIn: "2h" });
-
-  res.json({ success: true, token });
+  analytics.totalUsers++;
+  res.json({ success: true, brand: brandProfiles[brandId] });
 });
 
-// PROTECTED ROUTE
-app.get("/api/protected", (req, res) => {
-  const token = req.headers.authorization;
+// === GÉNÉRER DES SCRIPTS ===
+app.post("/api/generate", (req, res) => {
+  const { brandId, network, niche, count } = req.body;
 
-  if (!token) {
-    return res.status(401).json({ error: "Token manquant" });
+  const scripts = [];
+
+  for (let i = 0; i < (count || 1); i++) {
+    scripts.push({
+      id: "script_" + Date.now() + "_" + i,
+      network,
+      niche,
+      content: `[HOOK] ${niche} tendance ! [BODY] Idée virale générée. [CTA] Sauvegarde !`,
+      score: Math.floor(Math.random() * 40) + 60,
+      views: Math.floor(Math.random() * 900000),
+      engagement: Math.floor(Math.random() * 20) + 5,
+      createdAt: new Date(),
+    });
   }
 
-  try {
-    const decoded = jwt.verify(token, "secret123");
-    res.json({ success: true, email: decoded.email });
-  } catch (err) {
-    res.status(401).json({ error: "Token invalide" });
-  }
+  analytics.totalScripts += scripts.length;
+
+  if (!userHistory[brandId]) userHistory[brandId] = [];
+  userHistory[brandId].push(...scripts);
+
+  res.json({ success: true, scripts });
 });
 
-// START SERVER
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log("⚡ API RUNNING ON", PORT));
+// === HISTORIQUE ===
+app.get("/api/brand/:brandId/history", (req, res) => {
+  const history = userHistory[req.params.brandId] || [];
+  res.json({ success: true, history });
+});
 
+// === ROUTE FRONTEND ===
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "index.html"));
+});
+
+// === DEMARRAGE SERVEUR ===
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =>
+  console.log("🔥 DreamFlow Backend + Frontend running on port", PORT)
+);
