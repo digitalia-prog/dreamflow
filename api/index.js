@@ -86,3 +86,17 @@ app.get("/admin.html", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("🔥 DreamFlow PRO Backend running on port", PORT));
+
+// === EXPORT PDF ===
+app.post("/api/export/pdf", (req, res) => {
+  const { scripts } = req.body;
+
+  const txt = scripts
+    .map((s, i) => `SCRIPT ${i + 1}\n${s.content}\n\n`)
+    .join("");
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=scripts.pdf");
+
+  res.send(txt);
+});
