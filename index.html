@@ -2,34 +2,158 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DreamFlow Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamFlow Pro – Plateforme d’Agence IA</title>
+
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #6C63FF, #42A5F5);
-      color: white;
-      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      background: #f4f6fc;
+      color: #1a1a1a;
     }
-    .container {
-      margin-top: 100px;
+
+    /* HEADER */
+    header {
+      background: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
-    h1 {
-      font-size: 3rem;
+
+    header h1 {
+      font-size: 1.7rem;
+      margin: 0;
+      color: #6C63FF;
       font-weight: 700;
     }
-    p {
+
+    header nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .hero {
+      padding: 100px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #6C63FF, #42A5F5);
+      color: white;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
       font-size: 1.3rem;
       opacity: 0.9;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    /* SECTION CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 60px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #6C63FF;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #6C63FF;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-top: 40px;
+      transition: 0.3s;
+    }
+
+    .cta-btn:hover {
+      background: #534deb;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      background: #1a1a1a;
+      color: #fff;
+      margin-top: 80px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>DreamFlow Pro</h1>
-    <p>Bienvenue dans ton générateur de contenu le plus puissant 💫</p>
+
+<header>
+  <h1>DreamFlow Pro</h1>
+  <nav>
+    <a href="#">Accueil</a>
+    <a href="#">Fonctionnalités</a>
+    <a href="#">Tarifs</a>
+    <a href="#">Connexion</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>L'outil ultime pour les agences</h2>
+  <p>Automatise ta création de contenu, développe tes résultats clients, et scale ton agence grâce à la puissance de l’IA.</p>
+  <a href="#" class="cta-btn">Accéder à la plateforme</a>
+</section>
+
+<section class="cards">
+  <div class="card">
+    <h3>Scripts IA Premium</h3>
+    <p>Génère des scripts optimisés pour TikTok, Instagram, YouTube Shorts… adaptés à chaque niche.</p>
   </div>
+
+  <div class="card">
+    <h3>Analytique Client</h3>
+    <p>Suit les performances de tes campagnes, identifie les contenus viraux et optimise tes résultats.</p>
+  </div>
+
+  <div class="card">
+    <h3>Gestion Multi-Marques</h3>
+    <p>Crée et gère facilement les profils de tous tes clients avec leur ton, niche et objectifs.</p>
+  </div>
+
+  <div class="card">
+    <h3>Automatisation IA</h3>
+    <p>Gain de temps massif : workflows intelligents générant du contenu tous les jours automatiquement.</p>
+  </div>
+</section>
+
+<footer>
+  © 2025 DreamFlow Pro — Plateforme IA pour agences
+</footer>
+
 </body>
 </html>
