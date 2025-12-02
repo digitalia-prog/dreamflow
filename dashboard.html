@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ DreamFlow - Login</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: linear-gradient(135deg, #0a0014 0%, #1a0033 50%, #0f001f 100%);
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  background: linear-gradient(135deg, rgba(143, 99, 233, 0.15), rgba(118, 75, 162, 0.1));
+  border: 1px solid rgba(143, 99, 233, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 50px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(143, 99, 233, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+.logo {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #8F63E9;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  transition: all 0.3s;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.5);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.error {
+  color: #ff6b6b;
+  padding: 15px;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="logo">⚡</div>
+  <h1>DreamFlow</h1>
+  
+  <div class="error" id="error"></div>
+  
+  <form onsubmit="handleLogin(event)">
+    <div class="form-group">
+      <label>📧 Email</label>
+      <input type="email" id="email" placeholder="ton@email.com" required>
+    </div>
+
+    <div class="form-group">
+      <label>🔐 Mot de passe</label>
+      <input type="password" id="password" placeholder="••••••••" required>
+    </div>
+
+    <button type="submit" class="btn">🚀 Se connecter</button>
+  </form>
+
+  <div class="footer">
+    <p>Version Beta - Accès gratuit 🎉</p>
+  </div>
+</div>
+
+<script>
+function handleLogin(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  
+  if (email && password.length >= 6) {
+    localStorage.setItem('dreamflowUser', JSON.stringify({ email, loggedIn: true }));
+    window.location.href = '/dashboard.html';
+  } else {
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = '❌ Email et mot de passe valides requis (min 6 caractères)';
+  }
+}
+
+if (localStorage.getItem('dreamflowUser')) {
+  window.location.href = '/dashboard.html';
+}
+</script>
+
+</body>
+</html>
