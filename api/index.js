@@ -15,7 +15,7 @@ app.post("/api/auth/register", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Email & mot de passe requis" });
+    return r"Email & mot de passe requis" });
   }
 
   if (users[email]) {
