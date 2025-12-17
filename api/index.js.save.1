@@ -1,0 +1,10 @@
+app.get("/", (req, res) => {
+  res.json({ status: "DreamFlow API running 🚀" });
+});
+const express = require("express");
+const cors = require("cors");
+const OpenAI = require("openai");
+require("dotenv").config();
+
+const app = express();
+app.use(co
