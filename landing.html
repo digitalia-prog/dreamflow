@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamFlow - Générateur de Scripts IA pour TikTok & UGC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* HEADER NAVIGATION */
+        header {
+            background: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #9333ea;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f1f8 100%);
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .hero-highlight {
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
+        }
+
+        .cta-secondary {
+            background: white;
+            color: #9333ea;
+            margin-left: 20px;
+            border: 2px solid #9333ea;
+        }
+
+        /* STATS */
+        .stats {
+            max-width: 1200px;
+            margin: -50px auto 0;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: #9333ea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 44px;
+            margin-bottom: 60px;
+            text-align: center;
+            color: #1a1a1a;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature {
+            padding: 40px;
+            border-radius: 12px;
+            background: #f9f9f9;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* PRICING SECTION */
+        .pricing {
+            padding: 100px 20px;
+            background: #f5f7fa;
+        }
+
+        .pricing-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: #9333ea;
+            box-shadow: 0 10px 40px rgba(147, 51, 234, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured {
+            border-color: #9333ea;
+            box-shadow: 0 10px 40px rgba(147, 51, 234, 0.2);
+            transform: scale(1.05);
+        }
+
+        .plan-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #9333ea;
+            margin-bottom: 10px;
+        }
+
+        .price-period {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .plan-features {
+            text-align: left;
+            margin-bottom: 30px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .plan-features li {
+            list-style: none;
+            padding: 10px 0;
+            color: #666;
+        }
+
+        .plan-features li:before {
+            content: "✓ ";
+            color: #9333ea;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 44px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .cta-button-white {
+            background: white;
+            color: #9333ea;
+            display: inline-block;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #9333ea;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .cta-button, .cta-secondary {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .cta-secondary {
+                margin-left: 0;
+            }
+
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo">✨ DreamFlow</div>
+            <nav>
+                <a href="#features">Fonctionnalités</a>
+                <a href="#pricing">Tarifs</a>
+                <a href="#app">Application</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Génère des <span class="hero-highlight">scripts TikTok viraux</span> en 10 secondes</h1>
+            <p>DreamFlow est l'IA qui génère des scripts optimisés pour TikTok, Instagram Reels et UGC. Créateurs, agences et e-commerce, gagnez du temps et vendez plus.</p>
+            <button class="cta-button" onclick="window.location.href='#app'">Essayer Gratuitement</button>
+            <button class="cta-button cta-secondary" onclick="window.location.href='#pricing'">Voir les Tarifs</button>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">10s</div>
+            <div class="stat-label">Temps moyen de génération</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">+10k</div>
+            <div class="stat-label">Scripts générés</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">87%</div>
+            <div class="stat-label">Taux de conversion</div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <h2 class="section-title">Pourquoi DreamFlow ?</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Ultra Rapide</h3>
+                <p>Générez des scripts en moins de 10 secondes. Pas d'attente, pas de négociation. Efficacité maximale.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Optimisé TikTok</h3>
+                <p>Chaque script est conçu pour l'algorithme TikTok. Hooks accrocheurs, CTAs clairs, format parfait.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <h3>Moins Cher qu'un Scripteur</h3>
+                <p>Un scripteur humain coûte 200€ pour 10 scripts. Nous, c'est 0,60€ par script. Scalabilité garantie.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Protégé & Traçable</h3>
+                <p>Watermark automatique sur chaque script. Aucun risque de revente au black. Sécurité garantie.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Multiples Plateformes</h3>
+                <p>TikTok, Instagram Reels, YouTube Shorts, Facebook, Pinterest... Adaptez vos scripts partout.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📈</div>
+                <h3>Analytics Incluses</h3>
+                <p>Suivi des scripts générés, statistiques d'utilisation, tableau de bord intuitif.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Tarifs Simples & Transparents</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="plan-name">Gratuit</div>
+                <div class="price">0€</div>
+                <div class="price-period">Pour tester</div>
+                <ul class="plan-features">
+                    <li>3 scripts / jour</li>
+                    <li>30 scripts / mois</li>
+                    <li>Ton standard</li>
+                    <li>Sans export</li>
+                </ul>
+                <button class="cta-button" onclick="alert('Inscrivez-vous pour commencer!')">Commencer</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="plan-name">Pro</div>
+                <div class="price">19€</div>
+                <div class="price-period">par mois</div>
+                <ul class="plan-features">
+                    <li>50 scripts / jour</li>
+                    <li>500 scripts / mois</li>
+                    <li>Tons personnalisés</li>
+                    <li>Export PDF & Docs</li>
+                    <li>Support prioritaire</li>
+                </ul>
+                <button class="cta-button" onclick="alert('Paiement Stripe bientôt!')">Souscrire</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="plan-name">Premium</div>
+                <div class="price">49€</div>
+                <div class="price-period">par mois</div>
+                <ul class="plan-features">
+                    <li>Scripts illimités</li>
+                    <li>Tous les tons</li>
+                    <li>API accès</li>
+                    <li>Revente autorisée</li>
+                    <li>Support 24/7</li>
+                </ul>
+                <button class="cta-button" onclick="alert('Paiement Stripe bientôt!')">Souscrire</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section">
+        <h2>Prêt à générer vos premiers scripts ?</h2>
+        <p>Rejoignez des milliers de créateurs et d'agences qui font confiance à DreamFlow</p>
+        <a href="#app" class="cta-button-white">Lancer l'Application →</a>
+    </section>
+
+    <!-- APP SECTION -->
+    <section id="app" style="padding: 100px 20px; background: white;">
+        <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title">Essayez DreamFlow</h2>
+            <p style="font-size: 18px; color: #666; margin-bottom: 40px;">L'application complète avec tous les templates et fonctionnalités</p>
+            <a href="index.html" class="cta-button" style="font-size: 18px; padding: 20px 50px;">Accéder à l'Application →</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">À propos</a>
+                <a href="#">Conditions</a>
+                <a href="#">Confidentialité</a>
+                <a href="#">Contact</a>
+            </div>
+            <p>&copy; 2026 DreamFlow. Tous droits réservés. Généré avec ❤️ par IA.</p>
+        </div>
+    </footer>
+</body>
+</html>
